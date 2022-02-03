@@ -35,7 +35,7 @@ AppAsset::register($this);
         ) : ('');
         NavBar::begin([
             'brandLabel' => Yii::$app->name,
-            'brandUrl' => Yii::$app->homeUrl,
+            'brandUrl' => '/admin/',
             'options' => [
                 'class' => 'navbar navbar-expand-md navbar-dark bg-dark fixed-top',
             ],
