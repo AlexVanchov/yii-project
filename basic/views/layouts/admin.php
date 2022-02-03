@@ -86,6 +86,7 @@ AppAsset::register($this);
 
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    <script src="https://cdn.ckeditor.com/4.17.1/standard/ckeditor.js"></script>
     <script>
         $(document).ready(function() {
             $("#datepicker").datepicker({

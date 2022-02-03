@@ -13,7 +13,9 @@ use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\News;
 use app\models\NewsForm;
+use app\models\NewsImages;
 use yii\data\Pagination;
+use yii\web\UploadedFile;
 
 class AdminController extends Controller
 {
@@ -86,10 +88,10 @@ class AdminController extends Controller
     {
         $this->layout = 'admin';
         $request = Yii::$app->request;
-        $input = $request->post();
         $id = $request->get('id');
 
-        if (!empty($input)) { //Post Request
+        if (Yii::$app->request->isPost) { //Post Request
+            $input = $request->post();
             $attributes = $input['data'];
 
             // var_dump($attributes);
@@ -97,32 +99,40 @@ class AdminController extends Controller
 
             $model = new NewsForm();
             if ($model->load($request->post(), 'data') && $model->validate()) {
+                $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
+                $model->id = $id;
+                if ($model->upload()) {
+
+                }
                 if ($id !== null) {
                     News::updateData($id, $attributes);
                 } else {
                     $id = News::insertData($attributes);
                 }
                 Yii::$app->session->setFlash('success', 'Saved successfully');
+            } else {
 
-            }
-            else {
-                
                 Yii::$app->session->setFlash('error', 'Invalid input');
             }
             $this->redirect(array('admin/edit-news', 'id' => $id));
         } else {
 
             $categories = Category::getAll(false);
-            $categories=$categories['categories'];
+            $categories = $categories['categories'];
             // echo '<pre>';
             // var_dump();
             // exit;
             if ($id !== null) {
 
                 $data = News::get($id);
+                $images = NewsImages::get($id);
+                // var_dump($images);
+                // exit;
                 return $this->render('edit-news', [
                     'news' => $data,
+                    'images' => $images,
                     'categories' => $categories,
+                    'model' => new NewsForm
                 ]);
             } else {
                 return $this->render('edit-news', [
@@ -140,8 +150,19 @@ class AdminController extends Controller
             News::remove($id);
         }
 
-        $this->layout = 'admin';
         $this->redirect(array('admin/news'));
+    }
+    public function actionRemoveNewsImg()
+    {
+        $this->layout = 'admin';
+        $request = Yii::$app->request;
+        $id = $request->get('id');
+        if ($id !== null) {
+            $id = NewsImages::remove($id);
+        }
+
+        // $this->goBack();
+        $this->redirect(array('admin/edit-news', 'id' => $id));
     }
 
     /**
@@ -172,9 +193,9 @@ class AdminController extends Controller
     {
         $this->layout = 'admin';
         $request = Yii::$app->request;
-        $input = $request->post();
         $id = $request->get('id');
-        if (!empty($input)) {
+        if (Yii::$app->request->isPost) {
+            $input = $request->post();
             $attributes = $input['data'];
 
 

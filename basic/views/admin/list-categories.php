@@ -25,10 +25,6 @@ use yii\widgets\LinkPager;
             <thead>
                 <tr>
                     <th>
-                        <span class="custom-checkbox">
-                            <input type="checkbox" id="selectAll">
-                            <label for="selectAll"></label>
-                        </span>
                     </th>
                     <th>Title</th>
                     <th>Description</th>
@@ -39,10 +35,6 @@ use yii\widgets\LinkPager;
                 <?php foreach ($categories as $category) : ?>
                     <tr>
                         <td>
-                            <span class="custom-checkbox">
-                                <input type="checkbox" id="checkbox1" name="options[]" value="1">
-                                <label for="checkbox1"></label>
-                            </span>
                         </td>
                         <td><?= Html::encode("{$category->title}") ?></td>
                         <td><?= Html::encode("{$category->description}") ?></td>

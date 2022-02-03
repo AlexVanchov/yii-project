@@ -25,13 +25,9 @@ use yii\widgets\LinkPager;
             <thead>
                 <tr>
                     <th>
-                        <span class="custom-checkbox">
-                            <input type="checkbox" id="selectAll">
-                            <label for="selectAll"></label>
-                        </span>
                     </th>
                     <th>Title</th>
-                    <th>Description</th>
+                    <!-- <th>Description</th> -->
                     <th>Date</th>
                 </tr>
             </thead>
@@ -40,13 +36,9 @@ use yii\widgets\LinkPager;
                 <?php foreach ($news as $new) : ?>
                     <tr>
                         <td>
-                            <span class="custom-checkbox">
-                                <input type="checkbox" id="checkbox1" name="options[]" value="1">
-                                <label for="checkbox1"></label>
-                            </span>
                         </td>
                         <td><?= Html::encode("{$new->title}") ?></td>
-                        <td><?= Html::encode("{$new->description}") ?></td>
+                        <!-- <td><?= Html::encode("{$new->description}") ?></td> -->
                         <td><?= Html::encode("{$new->date}") ?></td>
                         <td>
                             <a href="<?= Url::to(['admin/edit-news', 'id' => $new->id]) ?>" class="edit btn btn-warning text-white" >Edit</a>
