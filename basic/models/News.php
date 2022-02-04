@@ -8,26 +8,55 @@ use yii\db\ActiveRecord;
 
 class News extends ActiveRecord
 {
-    public static function getAll($page = false) // with pagination
+    public static function getAll($page = false, $filters = false) // with pagination
     {
         $query = News::find();
 
         if ($page !== false) {
-    
-            $news = $query->orderBy('date DESC')
+            $news = $query;
+            if ($filters !== false) {
+                $orderByStr = '';
+                if ($filters['sortDate'] !== '') {
+                    switch ($filters['sortDate']) {
+                        case '+':
+                            $orderByStr = 'date ASC';
+                            break;
+                        case '-':
+                            $orderByStr = 'date DESC';
+                            break;
+                    }
+                }
+                $operator = $orderByStr != "" ? "," : "";
+                if ($filters['sortName'] !== '') {
+                    switch ($filters['sortName']) {
+                        case '+':
+                            $orderByStr .= $operator . 'title ASC';
+                            break;
+                        case '-':
+                            $orderByStr .= $operator . 'title DESC';
+                            break;
+                    }
+                }
+                $orderByStr = $orderByStr === "" ? "date DESC" : $orderByStr;
+                // var_dump($orderByStr);
+                // exit;
+                $news->orderBy($orderByStr);
+            } else {
+                $news->orderBy('date DESC');
+            }
+            $news = $news
                 ->offset($page * 6 - 6)
                 ->limit(6)
                 ->all();
-                // echo '<pre>';
-                // var_dump($news);
+            // echo '<pre>';
+            // var_dump($news);
             return $news;
-        }
-        else {
+        } else {
             $pagination = new Pagination([
                 'defaultPageSize' => 6,
                 'totalCount' => $query->count(),
             ]);
-    
+
             $news = $query->orderBy('id DESC')
                 ->offset($pagination->offset)
                 ->limit($pagination->limit)
@@ -37,7 +66,6 @@ class News extends ActiveRecord
                 'pagination' => $pagination,
             ];
         }
-        
     }
     public static function get($id)
     {

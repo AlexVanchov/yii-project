@@ -3,7 +3,37 @@ var maxPages = 0;
 $(document).ready(async function () {
     base_url = $('body').attr('base-url');
 
-    if ($('#isNews').val() !== undefined) {
+    if ($('#isNews').val() !== undefined) { // by name
+        $('#sort-name-btn').click(async function () {
+            if ($('#sort-name-btn').find('.fa').hasClass('fa-arrow-up')) {
+                $('#sort-name-btn').find('.fa').removeClass('fa-arrow-up').addClass('fa-arrow-down')
+                $('#sort-name').val('-');
+            } else if ($('#sort-name-btn').find('.fa').hasClass('fa-arrow-down')) {
+                $('#sort-name-btn').find('.fa').removeClass('fa-arrow-down');
+                $('#sort-name').val('');
+            } else {
+                $('#sort-name-btn').find('.fa').removeClass('fa-arrow-down').addClass('fa-arrow-up');
+                $('#sort-name').val('+');
+            }
+
+            data = await getNews();
+            loadNews(data.data)
+        });
+        $('#sort-date-btn').click(async function () { // by date
+            if ($('#sort-date-btn').find('.fa').hasClass('fa-arrow-up')) {
+                $('#sort-date-btn').find('.fa').removeClass('fa-arrow-up').addClass('fa-arrow-down')
+                $('#sort-date').val('-');
+            } else if ($('#sort-date-btn').find('.fa').hasClass('fa-arrow-down')) {
+                $('#sort-date-btn').find('.fa').removeClass('fa-arrow-down');
+                $('#sort-date').val('');
+            } else {
+                $('#sort-date-btn').find('.fa').removeClass('fa-arrow-down').addClass('fa-arrow-up');
+                $('#sort-date').val('+');
+            }
+
+            data = await getNews();
+            loadNews(data.data)
+        });
         data = await getNews();
 
         var news = data.data;
@@ -60,13 +90,16 @@ async function changePage(operation) {
 }
 async function getNews() {
     var res = '';
-    var url = base_url + "/site/get-news?page=" + $('#page').val()
+    var url = base_url + "/site/get-news";
+    var sortName = $('#sort-name').val();
+    var sortDate = $('#sort-date').val();
     await $.ajax({
         url: url,
-        type: 'get',
+        type: 'post',
         data: {
-            //   searchname: $("#searchname").val() , 
-            //   searchby:$("#searchby").val() , 
+            page: $('#page').val(),
+            sortName: sortName,
+            sortDate: sortDate,
             _csrf: $('#csrf').val()
         },
         success: function (data) {
@@ -84,8 +117,7 @@ function loadNews(news) {
     for (const news_el in news) {
         if (Object.hasOwnProperty.call(news, news_el)) {
             const element = news[news_el];
-            console.log(element);
-            
+
             var template = $('#news_template').clone();
             template.removeAttr('id');
             template.removeAttr('hidden');

@@ -140,8 +140,11 @@ class SiteController extends Controller
     public function actionGetNews()
     {
         if (Yii::$app->request->isAjax) {
-            $page = Yii::$app->request->get('page');
-            $data = News::getAll($page);
+            $page = Yii::$app->request->post('page');
+            $sortName = Yii::$app->request->post('sortName');
+            $sortDate = Yii::$app->request->post('sortDate');
+
+            $data = News::getAll($page, array("sortName" => $sortName, "sortDate" => $sortDate));
             $attributes = array();
             foreach ($data as $news) {
                 $el = $news->getAttributes();
@@ -156,7 +159,7 @@ class SiteController extends Controller
                 $attributes[] = $el;
             }
 
-            return json_encode(array('data' => $attributes, 'count'=>News::count()));
+            return json_encode(array('data' => $attributes, 'count' => News::count()));
         }
     }
 }

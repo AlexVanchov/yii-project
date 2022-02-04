@@ -14,7 +14,7 @@ $this->title = 'News';
 
         <section class="jumbotron text-center">
             <div class="container">
-                <h1 class="jumbotron-heading">Recent News</h1>
+                <h1 class="jumbotron-heading">News</h1>
 
             </div>
         </section>
@@ -36,6 +36,15 @@ $this->title = 'News';
                                 <small id="news-date" class="text-muted"></small>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div class="sort">
+                    <div class="form-group">
+                        <input type="hidden" id="sort-name" value="">
+                        <input type="hidden" id="sort-date" value="">
+                        <label for="sort">Sort by:</label>
+                        <button class="btn btn-secondary" id=sort-name-btn>Name <i class="fa  aria-hidden="true"></i></button>
+                        <button class="btn btn-secondary" id=sort-date-btn>Date <i class="fa" aria-hidden="true"></i></button>
                     </div>
                 </div>
                 <div class="row" id="news-container">
