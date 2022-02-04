@@ -39,8 +39,8 @@ use yii\widgets\LinkPager;
                         <td><?= Html::encode("{$category->title}") ?></td>
                         <td><?= Html::encode("{$category->description}") ?></td>
                         <td>
-                            <a href="<?= Url::to(['admin/edit-category', 'id' => $category->id]) ?>" class="edit btn btn-warning text-white" >Edit</a>
-                            <a href="<?= Url::to(['admin/remove-category', 'id' => $category->id]) ?>" class="delete btn btn-danger text-white" >Delete</a>
+                            <a href="<?= Url::to(['admin/edit-category', 'id' => $category->id]) ?>" class="edit btn btn-warning text-white " >Edit</a>
+                            <a href="<?= Url::to(['admin/remove-category', 'id' => $category->id]) ?>" class="delete btn btn-danger text-white delete-btn" >Delete</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>

@@ -14,7 +14,7 @@ class Category extends ActiveRecord
         if ($hasPagination) {
 
             $pagination = new Pagination([
-                'defaultPageSize' => 5,
+                'defaultPageSize' => 6,
                 'totalCount' => $query->count(),
             ]);
             $data['pagination']=$pagination;

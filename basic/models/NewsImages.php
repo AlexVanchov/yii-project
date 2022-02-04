@@ -25,8 +25,11 @@ class NewsImages extends ActiveRecord
     public static function remove($id)
     {
         $image = NewsImages::find()->where(['id' => $id])->one();
-        $news_id = $image['news_id'];
-        $image->delete();
+        $news_id =0;
+        if($image !== null) {
+            $news_id = $image['news_id'];
+            $image->delete();
+        }
         return $news_id;
     }
 }

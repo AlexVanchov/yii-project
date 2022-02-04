@@ -9,7 +9,13 @@ use yii\bootstrap4\Breadcrumbs;
 use yii\bootstrap4\Html;
 use yii\bootstrap4\Nav;
 use yii\bootstrap4\NavBar;
+use yii\helpers\Url;
+use yii\web\JqueryAsset;
 
+$this->registerJsFile(
+    '@web/js/app.js',
+    ['depends' => [JqueryAsset::class]]
+);
 AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
@@ -21,10 +27,18 @@ AppAsset::register($this);
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
+    
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    <script src="https://cdn.ckeditor.com/4.17.1/standard/ckeditor.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <!-- <script src="js/app.js"></script> -->
+    
 </head>
-<body class="d-flex flex-column h-100">
+<body class="d-flex flex-column h-100" base-url="<?php echo Url::base(true);?>">
+<input type="hidden" id="csrf" value="<?=Yii::$app->request->getCsrfToken()?>">
 <?php $this->beginBody() ?>
-
 <header>
     <?php
     NavBar::begin([
@@ -37,9 +51,8 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav'],
         'items' => [
-            ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
+            ['label' => 'News', 'url' => ['/site/index']],
+            ['label' => 'Categories', 'url' => ['/site/categories']],
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]
             ) : (
@@ -59,6 +72,7 @@ AppAsset::register($this);
 </header>
 
 <main role="main" class="flex-shrink-0">
+    
     <div class="container">
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
@@ -76,6 +90,20 @@ AppAsset::register($this);
 </footer>
 
 <?php $this->endBody() ?>
+<script>
+        $(document).ready(function() {
+            $("#datepicker").datepicker({
+                dateFormat: 'yy-mm-dd',
+                onSelect: function(selectedDate) {
+                    var v = $(this).val(),
+                        d = new Date(v);
+                    if (v.length > 0) {
+                        $('#date').val(d.valueOf()/1000);
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 </html>
 <?php $this->endPage() ?>

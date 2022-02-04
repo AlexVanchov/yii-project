@@ -20,7 +20,7 @@ use yii\helpers\Url;
                 </div>
                 <?php if (isset($category)) : ?>
                     <div class="col-sm-6">
-                        <a href="<?= Url::to(['admin/remove-category', 'id' => $category->id]) ?>" class="btn btn-danger"> <span>Delete</span></a>
+                        <a href="<?= Url::to(['admin/remove-category', 'id' => $category->id]) ?>" class="btn btn-danger delete-btn"> <span>Delete</span></a>
                     </div>
                 <?php endif; ?>
             </div>

@@ -8,23 +8,36 @@ use yii\db\ActiveRecord;
 
 class News extends ActiveRecord
 {
-    public static function getAll() // with pagination
+    public static function getAll($page = false) // with pagination
     {
         $query = News::find();
 
-        $pagination = new Pagination([
-            'defaultPageSize' => 5,
-            'totalCount' => $query->count(),
-        ]);
-
-        $news = $query->orderBy('id DESC')
-            ->offset($pagination->offset)
-            ->limit($pagination->limit)
-            ->all();
-        return [
-            'news' => $news,
-            'pagination' => $pagination,
-        ];
+        if ($page !== false) {
+    
+            $news = $query->orderBy('date DESC')
+                ->offset($page * 6 - 6)
+                ->limit(6)
+                ->all();
+                // echo '<pre>';
+                // var_dump($news);
+            return $news;
+        }
+        else {
+            $pagination = new Pagination([
+                'defaultPageSize' => 6,
+                'totalCount' => $query->count(),
+            ]);
+    
+            $news = $query->orderBy('id DESC')
+                ->offset($pagination->offset)
+                ->limit($pagination->limit)
+                ->all();
+            return [
+                'news' => $news,
+                'pagination' => $pagination,
+            ];
+        }
+        
     }
     public static function get($id)
     {
@@ -56,5 +69,17 @@ class News extends ActiveRecord
     {
         $news = News::find()->where(['id' => $id])->one();
         $news->delete();
+    }
+    public static function removeImages($id)
+    {
+        $images = NewsImages::find()->where(['news_id' => $id])->all();
+        foreach ($images as $image) {
+            $image->delete();
+        }
+    }
+    public static function count()
+    {
+        $count = News::find()->count();
+        return $count;
     }
 }

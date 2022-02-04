@@ -14,6 +14,7 @@ use app\models\ContactForm;
 use app\models\News;
 use app\models\NewsForm;
 use app\models\NewsImages;
+use app\models\User;
 use yii\data\Pagination;
 use yii\web\UploadedFile;
 
@@ -24,6 +25,7 @@ class AdminController extends Controller
      */
     public function behaviors()
     {
+        $this->checkPerms();
         return [
             'access' => [
                 'class' => AccessControl::className(),
@@ -89,6 +91,7 @@ class AdminController extends Controller
         $this->layout = 'admin';
         $request = Yii::$app->request;
         $id = $request->get('id');
+        $model = new NewsForm();
 
         if (Yii::$app->request->isPost) { //Post Request
             $input = $request->post();
@@ -97,18 +100,19 @@ class AdminController extends Controller
             // var_dump($attributes);
             // exit;
 
-            $model = new NewsForm();
             if ($model->load($request->post(), 'data') && $model->validate()) {
-                $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
-                $model->id = $id;
-                if ($model->upload()) {
-
-                }
                 if ($id !== null) {
                     News::updateData($id, $attributes);
                 } else {
                     $id = News::insertData($attributes);
                 }
+
+                $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
+                $model->id = $id;
+                if ($model->upload()) {
+
+                }
+                
                 Yii::$app->session->setFlash('success', 'Saved successfully');
             } else {
 
@@ -132,11 +136,12 @@ class AdminController extends Controller
                     'news' => $data,
                     'images' => $images,
                     'categories' => $categories,
-                    'model' => new NewsForm
+                    'model' => $model
                 ]);
             } else {
                 return $this->render('edit-news', [
-                    'categories' => $categories
+                    'categories' => $categories,
+                    'model' => $model
                 ]);
             }
         }
@@ -147,6 +152,7 @@ class AdminController extends Controller
         $request = Yii::$app->request;
         $id = $request->get('id');
         if ($id !== null) {
+            News::removeImages($id);
             News::remove($id);
         }
 
@@ -258,5 +264,15 @@ class AdminController extends Controller
         Yii::$app->user->logout();
 
         return $this->render('index');
+    }
+
+    private function checkPerms() {
+        if (!User::checkPermissions('Admin')) {
+            if (Yii::$app->user->isGuest) {
+                $this->redirect(array('site/login'));
+            } else {
+                $this->redirect(array('site/index'));
+            }
+        }
     }
 }

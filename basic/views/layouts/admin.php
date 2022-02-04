@@ -9,7 +9,12 @@ use yii\bootstrap4\Breadcrumbs;
 use yii\bootstrap4\Html;
 use yii\bootstrap4\Nav;
 use yii\bootstrap4\NavBar;
+use yii\web\JqueryAsset;
 
+$this->registerJsFile(
+    '@web/js/app.js',
+    ['depends' => [JqueryAsset::class]]
+);
 AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
@@ -34,7 +39,7 @@ AppAsset::register($this);
         Yii::$app->user->isGuest && Yii::$app->controller->action->id !== 'login' ? (Yii::$app->response->redirect(['admin/login'])
         ) : ('');
         NavBar::begin([
-            'brandLabel' => Yii::$app->name,
+            'brandLabel' => "Admin Panel",
             'brandUrl' => '/admin/',
             'options' => [
                 'class' => 'navbar navbar-expand-md navbar-dark bg-dark fixed-top',
@@ -82,11 +87,36 @@ AppAsset::register($this);
         </div>
     </footer>
 
+    <!-- Button trigger modal -->
+  
+    
+    <!-- Modal -->
+    <div class="modal fade" id="confirm-modal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmation</h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                </div>
+                <div class="modal-body">
+                    Do you want to delete this item?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                    <a href="" class="btn btn-danger" id="confirm-btn">Yes</a>
+                </div>
+            </div>
+        </div>
+    </div>
     <?php $this->endBody() ?>
 
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
     <script src="https://cdn.ckeditor.com/4.17.1/standard/ckeditor.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="js/app.js"></script>
     <script>
         $(document).ready(function() {
             $("#datepicker").datepicker({

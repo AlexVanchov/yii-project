@@ -9,6 +9,9 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\News;
+use app\models\NewsImages;
+use app\models\User;
 
 class SiteController extends Controller
 {
@@ -61,7 +64,8 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $data = News::getAll();
+        return $this->render('index', $data);
     }
 
     /**
@@ -77,6 +81,11 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
+
+
+            if (User::checkPermissions("Admin")) { // if user is admin redirect to admin panel
+                return $this->redirect(['admin/index']);
+            }
             return $this->goBack();
         }
 
@@ -124,5 +133,30 @@ class SiteController extends Controller
     public function actionAbout()
     {
         return $this->render('about');
+    }
+
+
+    // Ajax Requests
+    public function actionGetNews()
+    {
+        if (Yii::$app->request->isAjax) {
+            $page = Yii::$app->request->get('page');
+            $data = News::getAll($page);
+            $attributes = array();
+            foreach ($data as $news) {
+                $el = $news->getAttributes();
+
+                $images = NewsImages::get($el['id']);
+                $imgAttributes = array();
+                foreach ($images as $image) {
+                    $imgEl = $image->getAttributes();
+                    $imgAttributes[] = $imgEl['url'];
+                }
+                $el['images'] = $imgAttributes;
+                $attributes[] = $el;
+            }
+
+            return json_encode(array('data' => $attributes, 'count'=>News::count()));
+        }
     }
 }

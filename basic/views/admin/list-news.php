@@ -42,7 +42,7 @@ use yii\widgets\LinkPager;
                         <td><?= Html::encode("{$new->date}") ?></td>
                         <td>
                             <a href="<?= Url::to(['admin/edit-news', 'id' => $new->id]) ?>" class="edit btn btn-warning text-white" >Edit</a>
-                            <a href="<?= Url::to(['admin/remove-news', 'id' => $new->id]) ?>" class="delete btn btn-danger text-white" >Delete</a>
+                            <a href="<?= Url::to(['admin/remove-news', 'id' => $new->id]) ?>" class="delete btn btn-danger text-white delete-btn" >Delete</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>

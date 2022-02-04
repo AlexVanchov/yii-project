@@ -2,7 +2,9 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\web\JqueryAsset;
 use yii\widgets\ActiveForm;
+
 
 ?>
 
@@ -21,7 +23,7 @@ use yii\widgets\ActiveForm;
                 </div>
                 <?php if (isset($news)) : ?>
                     <div class="col-sm-6">
-                        <a href="<?= Url::to(['admin/remove-news', 'id' => $news->id]) ?>" class="btn btn-danger"> <span>Delete</span></a>
+                        <a href="<?= Url::to(['admin/remove-news', 'id' => $news->id]) ?>" class="btn btn-danger delete-btn"> <span>Delete</span></a>
                     </div>
                 <?php endif; ?>
             </div>
@@ -41,7 +43,7 @@ use yii\widgets\ActiveForm;
             </div>
             <div class="form-group">
                 <label for="">Date</label>
-                <input type="text" class="form-control-date" name="" id="datepicker" placeholder="" value="<?= isset($news) ? date('Y-m-d', strtotime($news->date)) : "" ?>">
+                <input autocomplete="off" type="text" class="form-control-date" name="" id="datepicker" placeholder="" value="<?= isset($news) ? date('Y-m-d', strtotime($news->date)) : "" ?>">
                 <input type="hidden" name="data[date]" id="date" value="
                     <?php
                     if (isset($news)) {
@@ -60,12 +62,14 @@ use yii\widgets\ActiveForm;
 
                 <?= $form->field($model, 'imageFiles[]')->fileInput(['multiple' => true]) ?>
 
-                <?php foreach ($images as $image) : ?>
-                    <div class="image-wrapper">
-                        <img class="img-fluid w-25" src="/<?= $image['url'] ?>" alt="">
-                        <a href="<?= Url::to(['admin/remove-news-img', 'id' => $image['id']]) ?>" class="btn btn-danger"> <span>Delete</span></a>
-                    </div>
-                <?php endforeach; ?>
+                <?php if (isset($images)) : ?>
+                    <?php foreach ($images as $image) : ?>
+                        <div class="image-wrapper">
+                            <img class="img-fluid w-25" src="/<?= $image['url'] ?>" alt="">
+                            <a href="<?= Url::to(['admin/remove-news-img', 'id' => $image['id']]) ?>" class="btn btn-danger delete-btn"> <span>Delete</span></a>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </div>
             <div class="form-group">
                 <label for="">Category</label>

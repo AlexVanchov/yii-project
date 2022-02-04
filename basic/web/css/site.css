@@ -184,12 +184,15 @@ table.table .avatar {
     margin-right: 10px;
 }
 .pagination {
-    float: right;
+    /* float: right; */
     margin: 0 0 5px;
+    
+    background: #f5f5f5;
+    padding: 8px;
 }
-.pagination li a {
+.pagination li a , .pagination li span {
     border: none;
-    font-size: 13px;
+    font-size: 18px;
     min-width: 30px;
     min-height: 30px;
     color: #999;
@@ -197,16 +200,18 @@ table.table .avatar {
     line-height: 30px;
     border-radius: 2px !important;
     text-align: center;
-    padding: 0 6px;
+    padding: 5px 10px;
 }
 .pagination li a:hover {
     color: #666;
 }	
 .pagination li.active a, .pagination li.active a.page-link {
-    background: #03A9F4;
+    background: #435d7d;
+    color: white;
 }
 .pagination li.active a:hover {        
-    background: #0397d6;
+    background: #435d7d;
+    color: white;
 }
 .pagination li.disabled i {
     color: #ccc;
