@@ -8,13 +8,16 @@ use yii\db\ActiveRecord;
 
 class News extends ActiveRecord
 {
-    public static function getAll($page = false, $filters = false) // with pagination
+    public static function getAll($page = false, $filters = false, $autocompleteUsage = false) // with pagination
     {
         $query = News::find();
 
         if ($page !== false) {
             $news = $query;
             if ($filters !== false) {
+                if ($autocompleteUsage) {
+                    $query->select('title');
+                }
                 $orderByStr = '';
                 if ($filters['sortDate'] !== '') {
                     switch ($filters['sortDate']) {
@@ -37,12 +40,30 @@ class News extends ActiveRecord
                             break;
                     }
                 }
+                if ($filters['category_id'] !== "0") {
+                    $query->where(['category_id' => $filters['category_id']]);
+                }
+                if ($filters['keyword'] !== "") {
+                    // $query->andFilterWhere([
+                    //     'or',
+                    //     ['like', 'title', $filters['keyword']],
+                    //     ['like', 'description', $filters['keyword']]
+                    // ]);
+                    $query->where(['or', ['like', 'title', $filters['keyword']], ['or', ['like', 'description', $filters['keyword']]]]);
+                    // $query->orWhere(['like', 'title', $filters['keyword']]);
+                    // $query->orWhere(['like', 'title', $filters['keyword']]);
+                }
                 $orderByStr = $orderByStr === "" ? "date DESC" : $orderByStr;
                 // var_dump($orderByStr);
                 // exit;
                 $news->orderBy($orderByStr);
             } else {
                 $news->orderBy('date DESC');
+            }
+            if ($autocompleteUsage) {
+                $news = $news
+                    ->all();
+                return $news;
             }
             $news = $news
                 ->offset($page * 6 - 6)
@@ -105,9 +126,23 @@ class News extends ActiveRecord
             $image->delete();
         }
     }
-    public static function count()
+    public static function count($category_id = false, $keyword = false)
     {
-        $count = News::find()->count();
+        $query = News::find();
+        $count = 0;
+        if ($keyword !== "") {
+            if ($category_id !== "0") {
+                $query->where(['and', ['category_id'=> $category_id]], ['or', ['like', 'title', $keyword], ['or', ['like', 'description', $keyword]]]);
+            }
+            else {
+                $query->where(['or', ['like', 'title', $keyword], ['or', ['like', 'description', $keyword]]]);
+            }
+            
+        } else if ($category_id !== "0") {
+            $query->where(['category_id' => $category_id]);
+        }
+
+        $count = $query->count();
         return $count;
     }
 }

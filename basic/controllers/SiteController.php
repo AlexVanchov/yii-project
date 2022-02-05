@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Category;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -64,8 +65,13 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $data = News::getAll();
-        return $this->render('index', $data);
+        return $this->render('index');
+    }
+
+    public function actionNews()
+    {
+        $data = Category::getAll(false);
+        return $this->render('news', $data);
     }
 
     /**
@@ -143,8 +149,10 @@ class SiteController extends Controller
             $page = Yii::$app->request->post('page');
             $sortName = Yii::$app->request->post('sortName');
             $sortDate = Yii::$app->request->post('sortDate');
+            $category_id = Yii::$app->request->post('category_id');
+            $keyword = Yii::$app->request->post('keyword');
 
-            $data = News::getAll($page, array("sortName" => $sortName, "sortDate" => $sortDate));
+            $data = News::getAll($page, array("sortName" => $sortName, "sortDate" => $sortDate, "category_id" => $category_id, "keyword" => $keyword));
             $attributes = array();
             foreach ($data as $news) {
                 $el = $news->getAttributes();
@@ -156,10 +164,30 @@ class SiteController extends Controller
                     $imgAttributes[] = $imgEl['url'];
                 }
                 $el['images'] = $imgAttributes;
+                $el['description'] = substr(strip_tags($el['description']), 0, 160) . "...";
                 $attributes[] = $el;
             }
 
-            return json_encode(array('data' => $attributes, 'count' => News::count()));
+            return json_encode(array('data' => $attributes, 'count' => News::count($category_id, $keyword)));
+        }
+    }
+    public function actionGetNewsAutocomplete()
+    {
+        if (Yii::$app->request->isAjax) {
+            $page = Yii::$app->request->post('page');
+            $sortName = Yii::$app->request->post('sortName');
+            $sortDate = Yii::$app->request->post('sortDate');
+            $category_id = Yii::$app->request->post('category_id');
+            $keyword = Yii::$app->request->post('keyword');
+
+            $data = News::getAll($page, array("sortName" => $sortName, "sortDate" => $sortDate, "category_id" => $category_id, "keyword" => $keyword), true);
+            $attributes = array();
+            foreach ($data as $news) {
+                $el = $news->getAttributes();
+                $attributes[] = $el;
+            }
+
+            return json_encode(array('data' => $attributes));
         }
     }
 }

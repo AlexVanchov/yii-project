@@ -14,7 +14,7 @@ $this->title = 'News';
 
         <section class="jumbotron text-center">
             <div class="container">
-                <h1 class="jumbotron-heading">News</h1>
+                <h1 class="jumbotron-heading">All News</h1>
 
             </div>
         </section>
@@ -28,7 +28,8 @@ $this->title = 'News';
                     <div class="card mb-4 box-shadow overflow-hidden">
                         <img class="card-img-top" id="news-image" src style="height: 225px; width: fit-content; display: block;"  data-holder-rendered="true">
                         <div class="card-body">
-                            <p class="card-text" id="news-title"></p>
+                            <h5 class="card-text" id="news-title"></h5>
+                            <p class="card-text" id="news-description"></p>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="btn-group">
                                     <a id="news-edit" href="<?= Url::to(['site/view-news']) ?>" class="btn btn-sm btn-outline-secondary">View</a>
