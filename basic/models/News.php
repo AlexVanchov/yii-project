@@ -119,6 +119,14 @@ class News extends ActiveRecord
         $news = News::find()->where(['id' => $id])->one();
         $news->delete();
     }
+    public static function removeFromCategory($id)
+    {
+        $news = News::find()->where(['category_id' => $id])->all();
+        foreach ($news as $n) {
+            $n->category_id = NULL;
+            $n->save();
+        }
+    }
     public static function removeImages($id)
     {
         $images = NewsImages::find()->where(['news_id' => $id])->all();

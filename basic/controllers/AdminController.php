@@ -12,6 +12,7 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\News;
+use app\models\NewsComment;
 use app\models\NewsForm;
 use app\models\NewsImages;
 use app\models\User;
@@ -47,9 +48,6 @@ class AdminController extends Controller
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function actions()
     {
         return [
@@ -63,21 +61,11 @@ class AdminController extends Controller
         ];
     }
 
-    /**
-     * Displays homepage.
-     *
-     * @return string
-     */
     public function actionIndex()
     {
         $this->layout = 'admin';
         return $this->render('index');
     }
-    /**
-     * Displays News.
-     *
-     * @return string
-     */
     public function actionNews()
     {
         $data = News::getAll();
@@ -110,9 +98,8 @@ class AdminController extends Controller
                 $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
                 $model->id = $id;
                 if ($model->upload()) {
-
                 }
-                
+
                 Yii::$app->session->setFlash('success', 'Saved successfully');
             } else {
 
@@ -230,6 +217,7 @@ class AdminController extends Controller
     }
 
 
+
     /**
      * Login action.
      *
@@ -266,7 +254,8 @@ class AdminController extends Controller
         return $this->render('index');
     }
 
-    private function checkPerms() {
+    private function checkPerms()
+    {
         if (!User::checkPermissions('Admin')) {
             if (Yii::$app->user->isGuest) {
                 $this->redirect(array('site/login'));

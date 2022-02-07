@@ -51,6 +51,7 @@ $this->title = 'News';
             <?php foreach ($categories as $category) : ?>
                 <div class="col-2 btn btn-secondary mx-4" onclick="loadNewsByCategory('<?= $category->id ?>')">
                     <h2 id="cat-<?= $category->id ?>"><?= $category->title ?></h2>
+                    <span><?= $category->description ?></span>
                 </div>
             <?php endforeach; ?>
 
@@ -81,7 +82,7 @@ $this->title = 'News';
                         <input type="hidden" id="sort-name" value="">
                         <input type="hidden" id="sort-date" value="">
                         <label for="sort">Sort by:</label>
-                        <button class="btn btn-secondary" id=sort-name-btn>Name <i class="fa  aria-hidden=" true"></i></button>
+                        <button class="btn btn-secondary" id=sort-name-btn>Name <i class="fa"  aria-hidden=" true"></i></button>
                         <button class="btn btn-secondary" id=sort-date-btn>Date <i class="fa" aria-hidden="true"></i></button>
                     </div>
                 </div>

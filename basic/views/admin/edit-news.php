@@ -60,7 +60,7 @@ use yii\widgets\ActiveForm;
                 <label for="">Images</label>
                 <!-- <input type="file" class="form-control-files" name="imageFiles[]" id="" placeholder="" multiple> -->
 
-                <?= $form->field($model, 'imageFiles[]')->fileInput(['multiple' => true]) ?>
+                <?= $form->field($model, 'imageFiles[]')->fileInput(['multiple' => true, 'accept'=>"image/*"]) ?>
 
                 <?php if (isset($images)) : ?>
                     <?php foreach ($images as $image) : ?>

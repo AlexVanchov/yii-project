@@ -11,6 +11,8 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\News;
+use app\models\NewsComment;
+use app\models\NewsComments;
 use app\models\NewsImages;
 use app\models\User;
 
@@ -73,7 +75,40 @@ class SiteController extends Controller
         $data = Category::getAll(false);
         return $this->render('news', $data);
     }
+    public function actionViewNews()
+    {
+        $id = Yii::$app->request->get('id');
+        $data = News::get($id);
+        
+        $comments = NewsComment::get($id);
+        $images = NewsImages::get($id);
+        $category = Category::get($data['category_id']);
+        return $this->render('view-news', array('news'=>$data, 'images'=>$images, 'category'=>$category['title'], 'comments'=>$comments));
+    }
 
+    public function actionAddComment()
+    {
+        
+        if (Yii::$app->request->isPost && !Yii::$app->user->isGuest) { //Post Request
+            $postData = Yii::$app->request->post();
+            $data = NewsComment::insertData($postData);
+            $this->redirect(array('view-news', 'id'=>$postData['news_id']));
+        }
+    }
+
+    
+    public function actionRemoveComment()
+    {
+
+        if (Yii::$app->request->isPost) {
+            $request = Yii::$app->request;
+            $data = $request->post();
+            
+            NewsComment::remove($data['comment_id']);
+
+            $this->redirect(array('site/view-news', 'id' => $data['news_id']));
+        }
+    }
     /**
      * Login action.
      *

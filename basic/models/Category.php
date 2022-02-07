@@ -53,6 +53,7 @@ class Category extends ActiveRecord
         return $category->id;
     }
     public static function remove($id) {
+        News::removeFromCategory($id);
         $category = Category::find()->where(['id' => $id])->one();
         $category->delete();
     }

@@ -52,7 +52,7 @@ class User extends ActiveRecord implements IdentityInterface
         }
         return false;
     }
-    public function checkPermissions($role) {
+    public static function checkPermissions($role) {
         //if user is logged in
         if(Yii::$app->user->isGuest) {
             return false;
