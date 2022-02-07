@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Category;
+use app\models\CommentForm;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -14,6 +15,7 @@ use app\models\News;
 use app\models\NewsComment;
 use app\models\NewsComments;
 use app\models\NewsImages;
+use app\models\RegisterForm;
 use app\models\User;
 
 class SiteController extends Controller
@@ -77,33 +79,36 @@ class SiteController extends Controller
     }
     public function actionViewNews()
     {
+        $model = new CommentForm(); // add comment
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+
+            if (Yii::$app->request->isPost && !Yii::$app->user->isGuest) { //Post Request
+                $postData = Yii::$app->request->post();
+                $data = NewsComment::insertData($model);
+                $this->redirect(array('view-news', 'id' => $model['news_id']));
+            }
+        }
+
+
         $id = Yii::$app->request->get('id');
         $data = News::get($id);
-        
+
         $comments = NewsComment::get($id);
         $images = NewsImages::get($id);
         $category = Category::get($data['category_id']);
-        return $this->render('view-news', array('news'=>$data, 'images'=>$images, 'category'=>$category['title'], 'comments'=>$comments));
+
+        return $this->render('view-news', array('news' => $data, 'images' => $images, 'category' => $category['title'], 'comments' => $comments, 'model' => $model));
     }
 
-    public function actionAddComment()
-    {
-        
-        if (Yii::$app->request->isPost && !Yii::$app->user->isGuest) { //Post Request
-            $postData = Yii::$app->request->post();
-            $data = NewsComment::insertData($postData);
-            $this->redirect(array('view-news', 'id'=>$postData['news_id']));
-        }
-    }
 
-    
+
     public function actionRemoveComment()
     {
 
         if (Yii::$app->request->isPost) {
             $request = Yii::$app->request;
             $data = $request->post();
-            
+
             NewsComment::remove($data['comment_id']);
 
             $this->redirect(array('site/view-news', 'id' => $data['news_id']));
@@ -122,8 +127,6 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-
-
             if (User::checkPermissions("Admin")) { // if user is admin redirect to admin panel
                 return $this->redirect(['admin/index']);
             }
@@ -141,20 +144,20 @@ class SiteController extends Controller
             return $this->goHome();
         }
 
-        if (Yii::$app->request->post()) {
+        $model = new RegisterForm();
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $data = Yii::$app->request->post();
 
-            $res = User::insertData($data);
-            if($res === false) {
-                return $this->redirect(['site/register', 'error'=>'User already exists']);
-            }
-            else if ($res === 0) {
-                return $this->redirect(['site/register', 'error'=>'Passwords doen\'t match']);
+            $res = User::insertData($model);
+            if ($res === false) {
+                return $this->redirect(['site/register', 'error' => 'User already exists']);
+            } else if ($res === 0) {
+                return $this->redirect(['site/register', 'error' => 'Passwords doen\'t match']);
             }
             return $this->redirect(['site/login']);
         } else {
             $error = Yii::$app->request->get('error');
-            return $this->render('register', array('error'=>$error));
+            return $this->render('register', array('error' => $error, 'model' => $model));
         }
     }
 

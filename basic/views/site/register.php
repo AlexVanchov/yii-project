@@ -29,18 +29,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
     <span class="text-danger"><?= $error ?></span>
-    <div class="form-group row field-loginform-username required">
-        <label class="col-lg-1 col-form-label mr-lg-3" for="">Username</label>
-        <input type="text" class="col-lg-3 form-control" name="username" autofocus="" aria-required="true">
-    </div>
-    <div class="form-group row field-loginform-username required">
-        <label class="col-lg-1 col-form-label mr-lg-3" for="">Password</label>
-        <input type="password" class="col-lg-3 form-control" name="password" autofocus="" aria-required="true">
-    </div>
-    <div class="form-group row field-loginform-username required">
-        <label class="col-lg-1 col-form-label mr-lg-3" for="">Confirm Password</label>
-        <input type="password" class="col-lg-3 form-control" name="rePassword" autofocus="" aria-required="true">
-    </div>
+    <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
+
+    <?= $form->field($model, 'password')->passwordInput() ?>
+    <?= $form->field($model, 'rePassword')->passwordInput() ?>
 
     <div class="form-group">
         <div class="offset-lg-1 col-lg-11">
@@ -48,6 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 
+    <?= $form->field($model, 'reCaptcha')->widget(\kekaadrenalin\recaptcha3\ReCaptchaWidget::class) ?>
     <?php ActiveForm::end(); ?>
     <span>Already have account? <a href="<?= Url::to(['site/login']) ?>">Login</a></span>
     <hr>

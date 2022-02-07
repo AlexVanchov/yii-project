@@ -30,18 +30,17 @@ class User extends ActiveRecord implements IdentityInterface
 
     public static function insertData($data)
     {
-        if ($data['username']){
-            $existingUser = User::find()->where(['username' => $data['username']])->one();
-            if ($existingUser !== NULL){
-                return false;
-            }
+        $existingUser = User::find()->where(['username' => $data['username']])->one();
+        if ($existingUser !== NULL) {
+            return false;
         }
+
+        
         $user = new User();
         $user->username = $data['username'];
-        if ($data['password'] == $data['rePassword']){
+        if ($data['password'] == $data['rePassword']) {
             $user->password = md5(md5($data['password']));
-        }
-        else {
+        } else {
             return 0;
         }
         $user->role = "User";
@@ -73,12 +72,13 @@ class User extends ActiveRecord implements IdentityInterface
         }
         return false;
     }
-    public static function checkPermissions($role) {
+    public static function checkPermissions($role)
+    {
         //if user is logged in
-        if(Yii::$app->user->isGuest) {
+        if (Yii::$app->user->isGuest) {
             return false;
         }
-        if(Yii::$app->user->identity->role == $role) {
+        if (Yii::$app->user->identity->role == $role) {
             return true;
         }
         return false;

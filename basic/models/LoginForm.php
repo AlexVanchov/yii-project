@@ -10,6 +10,7 @@ class LoginForm extends Model
     public $username;
     public $password;
     public $rememberMe = true;
+    public $reCaptcha;
 
     private $_user = false;
 
@@ -20,6 +21,7 @@ class LoginForm extends Model
             [['username', 'password'], 'required'],
             ['rememberMe', 'boolean'],
             ['password', 'validatePassword'],
+            [['reCaptcha'], \kekaadrenalin\recaptcha3\ReCaptchaValidator::className(), 'acceptance_score' => 0]
         ];
     }
 

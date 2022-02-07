@@ -81,16 +81,28 @@ use yii\widgets\ActiveForm;
                                 <div class="row clearfix">
                                     <div class="col-sm-12">
                                         <?php $form = ActiveForm::begin([
-                                            'action' => ['site/add-comment'],
+                                            // 'action' => ['site/add-comment'],
                                             'method' => 'post',
                                             'options' => ['enctype' => 'multipart/form-data'],
+                                            'fieldConfig' => [
+                                                'template' => "{label}\n{input}\n{error}",
+                                                'labelOptions' => ['class' => 'col-lg-12 col-form-label mr-lg-3'],
+                                                'inputOptions' => ['class' => 'col-lg-12 form-control'],
+                                                'errorOptions' => ['class' => 'col-lg-12 invalid-feedback'],
+                                            ],
+                                            
+                                            'validateOnSubmit'=>true,
                                         ]);
                                         ?>
-                                        <div class="form-group">
-                                            <input type="hidden" name="news_id" value="<?= $news->id ?>">
+                                        <?= $form->field($model, 'news_id')->hiddenInput(['value'=>$news->id])->label(false); ?>
+                                        <!-- <div class="form-group">
                                             <textarea rows="4" name="comment" class="form-control no-resize" placeholder=""></textarea>
-                                        </div>
+                                        </div> -->
+
+                                        <?= $form->field($model, 'comment')->textarea(['autofocus' => true, 'content'=> 'safe', 'required'=> true])->label(false) ?>
                                         <button type="submit" class="btn btn-block btn-primary">Post</button>
+
+                                        <?= $form->field($model, 'reCaptcha')->widget(\kekaadrenalin\recaptcha3\ReCaptchaWidget::class) ?>
                                         <?php ActiveForm::end(); ?>
                                     </div>
                                 </div>

@@ -12,6 +12,11 @@ $config = [
         '@npm'   => '@vendor/npm-asset',
     ],
     'components' => [
+        'reCaptcha3' => [
+            'class'      => 'kekaadrenalin\recaptcha3\ReCaptcha',
+            'site_key'   => '6LezzWEeAAAAAF48kWTtbJtg9pCloGEEI34nvapD',
+            'secret_key' => '6LezzWEeAAAAAA4U13lI6jWf7b_Qxk_ZFLwGcv-T',
+        ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'Gem8gRn-4JuaGE8VGGLQEsWvkOPKP26u',
