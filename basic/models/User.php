@@ -28,6 +28,27 @@ class User extends ActiveRecord implements IdentityInterface
         return static::findOne(['access_token' => $token]);
     }
 
+    public static function insertData($data)
+    {
+        if ($data['username']){
+            $existingUser = User::find()->where(['username' => $data['username']])->one();
+            if ($existingUser !== NULL){
+                return false;
+            }
+        }
+        $user = new User();
+        $user->username = $data['username'];
+        if ($data['password'] == $data['rePassword']){
+            $user->password = md5(md5($data['password']));
+        }
+        else {
+            return 0;
+        }
+        $user->role = "User";
+        $user->save();
+        return $user->id;
+    }
+
     public function getId()
     {
         return $this->id;

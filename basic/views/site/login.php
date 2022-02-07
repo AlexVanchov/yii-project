@@ -6,6 +6,7 @@
 
 use yii\bootstrap4\ActiveForm;
 use yii\bootstrap4\Html;
+use yii\helpers\Url;
 
 $this->title = 'Login';
 $this->params['breadcrumbs'][] = $this->title;
@@ -41,7 +42,8 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
 
     <?php ActiveForm::end(); ?>
-
+    <span>Don't have account? <a href="<?= Url::to(['site/register']) ?>">Register</a></span>
+    <hr>
     <span>
         Hint - 
         admin:admin

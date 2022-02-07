@@ -135,6 +135,28 @@ class SiteController extends Controller
             'model' => $model,
         ]);
     }
+    public function actionRegister()
+    {
+        if (!Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+
+        if (Yii::$app->request->post()) {
+            $data = Yii::$app->request->post();
+
+            $res = User::insertData($data);
+            if($res === false) {
+                return $this->redirect(['site/register', 'error'=>'User already exists']);
+            }
+            else if ($res === 0) {
+                return $this->redirect(['site/register', 'error'=>'Passwords doen\'t match']);
+            }
+            return $this->redirect(['site/login']);
+        } else {
+            $error = Yii::$app->request->get('error');
+            return $this->render('register', array('error'=>$error));
+        }
+    }
 
     /**
      * Logout action.
