@@ -80,23 +80,26 @@ class SiteController extends Controller
     public function actionViewNews()
     {
         $model = new CommentForm(); // add comment
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-
-            if (Yii::$app->request->isPost && !Yii::$app->user->isGuest) { //Post Request
+        if (Yii::$app->request->isPost && !Yii::$app->user->isGuest) { //Post Request
+            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
                 $postData = Yii::$app->request->post();
                 $data = NewsComment::insertData($model);
-                $this->redirect(array('view-news', 'id' => $model['news_id']));
+                $news = News::get($data);
+
+                $this->redirect('/news/' . $news['url']);
             }
         }
 
+        $title = Yii::$app->request->get('title');
+        $news_id = News::getIdByTitle($title);
+        $data = News::get($news_id);
+        $this->view->title = $data['title'];
 
-        $id = Yii::$app->request->get('id');
-        $data = News::get($id);
-
-        $comments = NewsComment::get($id);
-        $images = NewsImages::get($id);
+        $comments = NewsComment::get($news_id);
+        $images = NewsImages::get($news_id);
         $category = Category::get($data['category_id']);
 
+        // $model_new = new CommentForm(); // add comment
         return $this->render('view-news', array('news' => $data, 'images' => $images, 'category' => $category['title'], 'comments' => $comments, 'model' => $model));
     }
 
@@ -110,8 +113,9 @@ class SiteController extends Controller
             $data = $request->post();
 
             NewsComment::remove($data['comment_id']);
+            $news = News::get($data['news_id']);
 
-            $this->redirect(array('site/view-news', 'id' => $data['news_id']));
+            $this->redirect('/news/' . $news['url']);
         }
     }
     /**

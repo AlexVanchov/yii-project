@@ -49,11 +49,11 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav'],
         'items' => [
-            ['label' => 'News', 'url' => ['/site/news']],
+            ['label' => 'News', 'url' => ['/news']],
             // ['label' => 'Categories', 'url' => ['/site/categories']],
             
             Yii::$app->user->isGuest ? (
-                ['label' => 'Login', 'url' => ['/site/login']]
+                ['label' => 'Login', 'url' => ['/login']]
                 
             ) : (
                 '<li>'

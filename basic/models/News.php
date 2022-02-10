@@ -94,12 +94,19 @@ class News extends ActiveRecord
         return $news;
     }
 
+    public static function getIdByTitle($title)
+    {
+        $news = News::find()->where(['url' => $title])->one();
+        return $news->id;
+    }
+
     public static function updateData($id, $data)
     {
         $news = News::find()->where(['id' => $id])->one();
         $news->title = $data['title'];
         $news->description = $data['description'];
         $news->category_id = $data['category_id'];
+        $news->url = self::_seoUrl($data['title']);
         $news->date = date("Y-m-d H:i:s", $data['date']);
         $news->save();
     }
@@ -111,6 +118,7 @@ class News extends ActiveRecord
         $news->description = $data['description'];
         $news->category_id = $data['category_id'];
         $news->date = date("Y-m-d H:i:s", $data['date']);
+        $news->url = self::_seoUrl($data['title']);
         $news->save();
         return $news->id;
     }
@@ -152,5 +160,15 @@ class News extends ActiveRecord
 
         $count = $query->count();
         return $count;
+    }
+
+    private static function _seoUrl($string)
+    {
+        $string = strip_tags($string);
+        $string = preg_replace('/[^A-Za-z0-9-]+/', ' ', $string);
+        $string = trim($string);
+        $string = preg_replace('/[^A-Za-z0-9-]+/', '-', $string);
+        $slug = strtolower($string);
+        return $slug;
     }
 }

@@ -32,7 +32,7 @@ $this->title = 'News';
                             <p class="card-text" id="news-description"></p>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="btn-group">
-                                    <a id="news-edit" href="<?= Url::to(['site/view-news']) ?>" class="btn btn-sm btn-outline-secondary">View</a>
+                                    <a id="news-edit" href="" class="btn btn-sm btn-outline-secondary">View</a>
                                 </div>
                                 <small id="news-date" class="text-muted"></small>
                             </div>

@@ -17,7 +17,7 @@ class CommentForm extends Model
     {
         return [
             [['comment', 'news_id'], 'required'],
-            [['reCaptcha'], \kekaadrenalin\recaptcha3\ReCaptchaValidator::className(), 'acceptance_score' => 0]
+            [['reCaptcha'], \kekaadrenalin\recaptcha3\ReCaptchaValidator::class, 'acceptance_score' => 0]
         ];
     }
 

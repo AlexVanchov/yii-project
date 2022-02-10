@@ -99,7 +99,7 @@ use yii\widgets\ActiveForm;
                                             <textarea rows="4" name="comment" class="form-control no-resize" placeholder=""></textarea>
                                         </div> -->
 
-                                        <?= $form->field($model, 'comment')->textarea(['autofocus' => true, 'content'=> 'safe', 'required'=> true])->label(false) ?>
+                                        <?= $form->field($model, 'comment')->textarea(['required'=> true])->label(false) ?>
                                         <button type="submit" class="btn btn-block btn-primary">Post</button>
 
                                         <?= $form->field($model, 'reCaptcha')->widget(\kekaadrenalin\recaptcha3\ReCaptchaWidget::class) ?>

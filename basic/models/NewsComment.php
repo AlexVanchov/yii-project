@@ -23,7 +23,7 @@ class NewsComment extends ActiveRecord
         $comment->username = Yii::$app->user->identity->username;
         $comment->user_id = Yii::$app->user->getId();
         $comment->save();
-        return $comment->id;
+        return $comment->news_id;
     }
     public static function remove($id)
     {

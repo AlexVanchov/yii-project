@@ -54,6 +54,9 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'news' => 'site/news',
+                'news/<title:.*>' => 'site/view-news',
+                'login' => 'site/login',
             ],
         ],
 

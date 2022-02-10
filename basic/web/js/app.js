@@ -215,7 +215,8 @@ function loadNews(news) {
             template.find('#news-date').text(element.date);
             template.find('#news-content').text(element.content);
             template.find('#news-image').attr('src', base_url + '/' + (element.images[0] == null ? 'images/news.jpg' : element.images[0]));
-            template.find('#news-edit').attr('href', base_url + '/site/view-news?id=' + element.id);
+            template.find('#news-edit').attr('href', base_url + '/news/'+element.url);
+            
             $('#news-container').append(template);
         }
     }
@@ -247,4 +248,4 @@ async function loadNewsByCategory(category_id) {
         $('#category_id').val('0');
         $('#news-container').html('');
     });
-}
+} 
